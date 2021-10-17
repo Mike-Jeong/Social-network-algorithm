@@ -17,14 +17,15 @@ public class GraphTest
                           {0, 0, 0.5, 0.8, 0, 0.7}, //Emma
                           {0, 0, 0, 0, 0.7, 0}}; //Fred
 
-      BAFBP test = new BAFBP(name, atable);
+      //BAFBP test = new BAFBP(name, atable);
 
-      test.algorithm("Emma", "Anna");
+      //test.algorithm("Emma", "Anna");
 
-      CliqueFinder c = new CliqueFinder<>(graph, weights);
+      CliqueFinder c = new CliqueFinder<>(name, atable);
 
       //test t = new test(name, atable);
 
-      
+
+
    }
 }
