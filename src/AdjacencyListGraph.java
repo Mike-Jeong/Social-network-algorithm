@@ -2,8 +2,6 @@
    A class that implements a directed or an undirected graph using an
    adjacency list as the underlying data structure, and whose vertices
    hold elements of type E which should have a suitable hash function
-   @author Andrew Ensor
-   @version 1.1 allows directed as well as undirected graphs
 */
 import java.util.Collections;
 import java.util.HashMap;

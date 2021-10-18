@@ -18,12 +18,12 @@ public class GraphTest
                           {0, 0, 0, 0, 0.7, 0}}; //Fred
 
       //BAFBP test = new BAFBP(name, atable);
-
       //test.algorithm("Emma", "Anna");
 
-      CliqueFinder c = new CliqueFinder<>(name, atable);
+      //CliqueFinder clFinder = new CliqueFinder<>(name, atable);
+      //CliqueFinder2 clFinder2 = new CliqueFinder2<>(name, atable);
 
-      //test t = new test(name, atable);
+      CommunityClusterFinder cfinder = new CommunityClusterFinder(name, atable);
 
 
 

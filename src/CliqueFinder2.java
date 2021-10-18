@@ -1,50 +1,191 @@
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 public class CliqueFinder2<E> {
 
-    private GraphADT<E> graph;
-    private Map<Edge<E>, Double> weights;
+    GraphADT<String> graphForDegeneracy = new AdjacencyListGraph<String>();
+    Vertex[] names;
+    GraphADT<E> graph = new AdjacencyListGraph<E>();
+    private double[][] wtable;
+    String[] name;
     private Set<Vertex<E>> R, P, X;
+    int max;
+    List<Set<Vertex<E>>> maxs = new LinkedList<>();
 
-    public CliqueFinder2(GraphADT<E> graph, Map<Edge<E>, Double> weights) {
-        this.graph = graph;
-        this.weights = weights;
+    public CliqueFinder2(Enum[] name, double[][] atable) {
+        names = new Vertex[name.length];
+        wtable = new double[name.length][name.length];
+        this.name = new String[name.length];
+
+        for (int i = 0; i < names.length; i++) {
+            names[i] = graph.addVertex((E) name[i]);
+            this.name[i] = String.valueOf(name[i]);
+        }
+
+        for (int i = 0; i < atable.length; i++) {
+
+            for (int j = i + 1; j < atable.length; j++) {
+
+                wtable[i][j] = -Math.log(atable[i][j]);
+
+                if (i != j && atable[i][j] != 0) {
+                    graph.addEdge(names[i], names[j], atable[i][j]);
+                }
+            }
+        }
+
         R = new HashSet<Vertex<E>>();
         P = new HashSet<Vertex<E>>();
         X = new HashSet<Vertex<E>>();
+
+        P = graph.vertexSet();
+        Bron_KerboschWithPivot(R, P, X, "");
+
+        for (int i = 0; i < maxs.size(); i++) {
+            printClique(maxs.get(i));
+        }
+
+        System.out.println("Maximal clique size = " + max);
+        System.out.println("==============================================");
+        System.out.println(graph);
+
     }
 
-    // Bron_Kerbosch algorithm without a Pivot 
-    private void Bron_Kerbosch(Set<Vertex<E>> R, Set<Vertex<E>> P, Set<Vertex<E>> X) {
+    private void Bron_KerboschWithPivot(Set<Vertex<E>> R, Set<Vertex<E>> P, Set<Vertex<E>> X, String pre) {
 
-        System.out.print(printSet(R) + ", " + printSet(P) + ", " + printSet(X));
+        System.out.print(pre + " " + printSet(R) + ", " + printSet(P) + ", " + printSet(X));
         if ((P.size() == 0) && (X.size() == 0)) {
-            printClique(R);
-            return;
+
+            if (max <= R.size()) {
+                if (max != R.size()) {
+                    maxs.clear();
+                }
+                max = R.size();
+                Set<Vertex<E>> result = new HashSet<Vertex<E>>();
+                for (Vertex<E> v : R) {
+
+                    result.add(v);
+                }
+                if ( !maxs.contains(result)) {
+
+                    maxs.add(result);
+                    
+                }
+               
+
+                System.out.println();
+                return;
+            }
         }
-        System.out.println();
 
         Set<Vertex<E>> P1 = new HashSet<Vertex<E>>(P);
+      
+        // Find Pivot
+        Vertex<E> u = getMaxDegreeVertex(union(P, X));//
+
+        // P = P / Nbrs(u) 
+        P = removeNbrs(P, u);
 
         for (Vertex<E> v : P) {
             R.add(v);
-            Bron_Kerbosch(R, intersect(P1, v.adjacentVertices()),
-                    intersect(X, v.adjacentVertices()));
+            Bron_KerboschWithPivot(R, intersect(P1, v.adjacentVertices()), intersect(X, v.adjacentVertices()), ///
+                    pre + "\t");
             R.remove(v);
             P1.remove(v);
             X.add(v);
         }
+
     }
-  
-    // Intersection of two sets 
+
+    Set<Vertex<E>> union(Set<Vertex<E>> setFirst, Set<Vertex<E>> setSecond) {
+        Set<Vertex<E>> setHold = setFirst;
+
+        if (setSecond.isEmpty()) {
+            return setHold;
+        }
+
+        else {
+            setHold.addAll(setSecond);
+            return setHold;
+        }
+    }
+
+    Vertex<E> getMaxDegreeVertex(Set<Vertex<E>> g) {
+
+        Vertex<E> a = null;
+        String[] b = new String[g.size()];
+        Vertex<E>[] v = new Vertex[g.size()];
+        int i = 0;
+
+        Iterator<Vertex<E>> iter = g.iterator();
+        System.out.println();
+        while (iter.hasNext()) {
+
+            v[i] = iter.next();
+            b[i] = String.valueOf(v[i].getUserObject());
+            i++;
+        }
+
+        Arrays.sort(b);
+
+        for (Vertex<E> vertex : v) {
+
+            if (vertex.getUserObject().toString() == b[g.size() - 1]) {
+
+                a = vertex;
+
+            }
+
+        }
+
+        return a;
+    }
+
+    Set<Vertex<E>> removeNbrs(Set<Vertex<E>> arlFirst, Vertex<E> v) {
+        Set<Vertex<E>> arlHold = new HashSet<>(arlFirst);
+
+        if (v != null) {
+            arlHold.removeAll(v.adjacentVertices());
+         }
+
+        return arlHold;
+    }
+
     private Set<Vertex<E>> intersect(Set<Vertex<E>> set1, Set<Vertex<E>> set2) {
         Set<Vertex<E>> intersect = new HashSet<Vertex<E>>(set1);
         intersect.retainAll(set2);
         return intersect;
+    }
+
+    ArrayList<Vertex> getDegeneracyOrdering() {
+
+        GraphADT<String> s = new AdjacencyListGraph<String>();
+        ArrayList<Vertex> graphSorted = new ArrayList<Vertex>();
+        Set<Vertex<String>> t = graphForDegeneracy.vertexSet();
+        String[] c = new String[t.size()];
+        int i = 0;
+
+        Iterator<Vertex<String>> iter = t.iterator();
+        while (iter.hasNext()) {
+
+            c[i] = iter.next().getUserObject();
+            i++;
+        }
+
+        Arrays.sort(c);
+
+        for (int j = 0; j < c.length; j++) {
+            graphSorted.add(s.addVertex(c[j]));
+        }
+
+        return graphSorted;
     }
 
     private void printClique(Set<Vertex<E>> R) {
@@ -69,49 +210,4 @@ public class CliqueFinder2<E> {
         return s.toString();
     }
 
-    public static void main(String[] args) {
-        
-        double[][] table
-                = {{0, 0.5, 0.4, 0, 0, 0},
-                {0.5, 0, 0, 0.4, 0, 0},
-                {0.4, 0, 0, 0.3, 0.5, 0},
-                {0, 0.4, 0.3, 0, 0.8, 0},
-                {0, 0, 0.5, 0.8, 0, 0.7},
-                {0, 0, 0, 0, 0.7, 0}};
-
-        GraphADT<String> graph = new AdjacencyListGraph<String>(GraphADT.GraphType.UNDIRECTED);
-        Vertex<String> a = graph.addVertex("Anna");
-        Vertex<String> b = graph.addVertex("Bill");
-        Vertex<String> c = graph.addVertex("Carl");
-        Vertex<String> d = graph.addVertex("Dave");
-        Vertex<String> e = graph.addVertex("Emma");
-        Vertex<String> f = graph.addVertex("Fred");
-
-        Map<Integer, Vertex<String>> vertices = new HashMap<Integer, Vertex<String>>();
-        vertices.put(0, a);
-        vertices.put(1, b);
-        vertices.put(2, c);
-        vertices.put(3, d);
-        vertices.put(4, e);
-        vertices.put(5, f);
-
-        Map<Edge<String>, Double> weights = new HashMap<Edge<String>, Double>();
-
-        for (int i = 0; i < table.length; i++) {
-            for (int j = i; j < table.length; j++) {
-                if (table[i][j] != 0) {
-                    Edge<String> edge = graph.addEdge(vertices.get(i), vertices.get(j),0);
-                    weights.put(edge, -Math.log(table[i][j]));
-                }
-            }
-        }
-
-        System.out.println("Example Graph:\n" + graph);
-
-        CliqueFinder2<String> clique = new CliqueFinder2<String>(graph, weights);
-        clique.P = graph.vertexSet();
-        clique.Bron_Kerbosch(clique.R, clique.P, clique.X);
-    }
-
 }
-
