@@ -17,11 +17,11 @@ public class GraphTest
                           {0, 0, 0.5, 0.8, 0, 0.7}, //Emma
                           {0, 0, 0, 0, 0.7, 0}}; //Fred
 
-      //BAFBP test = new BAFBP(name, atable);
-      //test.algorithm("Emma", "Anna");
+      //BAFBP test = new BAFBP(name, atable);// Class that find the Best Association Between People.
+      //test.algorithm("Emma", "Anna");// Find the shortest path between Emma & Anna
 
-      //CliqueFinder clFinder = new CliqueFinder<>(name, atable);
-      //CliqueFinder2 clFinder2 = new CliqueFinder2<>(name, atable);
+      //CliqueFinder clFinder = new CliqueFinder<>(name, atable); // CliqueFinder which is implement Bron Kerbosch Algorithm
+      //CliqueFinder2 clFinder2 = new CliqueFinder2<>(name, atable); // CliqueFinder which is implement Bron Kerbosch with pivot Algorithm 
 
       CommunityClusterFinder cfinder = new CommunityClusterFinder(name, atable);
 
