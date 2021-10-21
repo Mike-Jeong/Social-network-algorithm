@@ -81,6 +81,14 @@ public class CommunityClusterFinder2<E> {
                 if (mcluster.get(key) == warray[0]) {
                     Edge<String> edge = key;
                     warray[0] = Double.MAX_VALUE;
+
+                    Vertex<String>[] a = new Vertex[edge.endVertices().length];
+
+                    for (int j2 = 0; j2 < a.length; j2++) {
+                        a[j2] = edge.endVertices()[j2];
+                        System.out.println("????" + a[j2]);  
+                    }
+                
                     mcluster.replace(key, warray[0]);
 
                     sets.union(edge.endVertices()[0].getUserObject(), edge.endVertices()[1].getUserObject());

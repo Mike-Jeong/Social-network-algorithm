@@ -22,8 +22,9 @@ public class GraphTest
 
       //CliqueFinder clFinder = new CliqueFinder<>(name, atable); // CliqueFinder which is implement Bron Kerbosch Algorithm
       //CliqueFinder2 clFinder2 = new CliqueFinder2<>(name, atable); // CliqueFinder which is implement Bron Kerbosch with pivot Algorithm 
-
+      
       CommunityClusterFinder cfinder = new CommunityClusterFinder(name, atable);
+      CommunityClusterFinder2 cfinder2 = new CommunityClusterFinder2(name, atable);
 
 
 
