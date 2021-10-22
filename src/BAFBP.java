@@ -33,7 +33,7 @@ public class BAFBP {
     }
 
     public int stringToint(String s) {
-        // 문자열을 int형으로 바꿔준다.
+        
         int x = Arrays.asList(name).indexOf(s);
         return x;
     }
