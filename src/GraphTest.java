@@ -9,7 +9,7 @@ public class GraphTest
 
    public static void main(String[] args)
    {  
-     Name[] name = Name.values();
+      Name[] name = Name.values();
       double[][] atable = {{0, 0.5, 0.4, 0, 0, 0}, //Anna
                           {0.5, 0, 0, 0.4, 0, 0}, //Bill
                           {0.4, 0, 0, 0.3, 0.5, 0}, //Carl
@@ -24,7 +24,7 @@ public class GraphTest
       //CliqueFinder2 clFinder2 = new CliqueFinder2<>(name, atable); // CliqueFinder which is implement Bron Kerbosch with pivot Algorithm 
       
       CommunityClusterFinder cfinder = new CommunityClusterFinder(name, atable);
-      CommunityClusterFinder2 cfinder2 = new CommunityClusterFinder2(name, atable);
+    
 
 
 

@@ -180,34 +180,6 @@ public class ForestDisjointSets<E> implements DisjointSetsADT<E> {
             }
         }
 
-        System.out.println("Example Graph:\n" + graph);
-
-        DisjointSetsADT<String> sets = new ForestDisjointSets<String>();
-        System.out.println("Creating singleton sets for Anna,Bill,Carl,Dave,Emma,Fred");
-
-        for (Vertex<String> vertex : graph.vertexSet()) {
-            sets.makeSet(vertex.getUserObject());
-        }
-        System.out.println(sets);
-
-        System.out.println("Union {Dave} with {Emma}");
-        String de = sets.union(d.getUserObject(), e.getUserObject());
-        System.out.println(sets);
-
-        System.out.println("Union {Dave,Emma} with {Fred}");
-        String def = sets.union(de, f.getUserObject());
-        System.out.println(sets);
-
-        System.out.println("Union {Anna} with {Bill}");
-        String ab = sets.union(a.getUserObject(), b.getUserObject());
-        System.out.println(sets);
-
-        System.out.println("Union {Carl} with {Dave,Emma,Fred}");
-        String cdef = sets.union(c.getUserObject(), def);
-        System.out.println(sets);
-        
-         System.out.println("Union {Anna,Bill} with {Carl,Dave,Emma,Fred}");
-        String abcdef = sets.union(ab, cdef);
-        System.out.println(sets);
+      
     }
 }
