@@ -17,6 +17,12 @@ public class GraphTest
                           {0, 0, 0.5, 0.8, 0, 0.7}, //Emma
                           {0, 0, 0, 0, 0.7, 0}}; //Fred
 
+
+
+      //*Constructer and calling methods for Project*
+      
+      
+      
       //BAFBP test = new BAFBP(name, atable);// Class that find the Best Association Between People.
       //test.algorithm("Emma", "Anna");// Find the shortest path between Emma & Anna
 
